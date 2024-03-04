@@ -1,14 +1,25 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
+
 from sqlalchemy import create_engine, Column, Integer, String, Date, Float
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-from datetime import datetime
+
+import configparser
+
+# Import config values
+config = configparser.ConfigParser()
+config.read("config.ini")
+db_url = config['Database']['url']
+print(f'---------- \n')
+print(f'---------- {db_url}')
+
 
 app = Flask(__name__)
+CORS(app)
 
 # Database setup
-DATABASE_URL = 'postgresql://localhost:5432/op_pop'
-engine = create_engine(DATABASE_URL)
+engine = create_engine(db_url)
 Base = declarative_base()
 
 class Character(Base):
@@ -19,6 +30,7 @@ class Character(Base):
     date_added = Column(Date)
     sentiment_score = Column(Float)
     picture_link = Column(String)
+    mentions = Column(Integer)
 
 # Create the table in the database
 Base.metadata.create_all(engine)
@@ -60,26 +72,46 @@ def get_all_characters():
     """
     Get all characters
     """
-    responses = session.query(Character).all()
-    for response in responses:
-        print(response.full_name)
-    print(f'---------\n{response}')
-    return jsonify({
-        'message': 'huh'
-        })
+    data = session.query(Character).all()
+    res = []
+    # for row in data:
+    #     res.append({row.id: }
+    #     character_list = [{'id': character.id, 'name': character.name, 'age': character.age} for character in characters]
+    character_list = [ {
+        "id": character.id,
+        "full_name": character.full_name,
+        "date_added": character.date_added,
+        "sentiment_score": character.sentiment_score,
+        "picture_link": character.picture_link } for character in data ]
+    return jsonify(
+        { "characters": character_list }
+    )
     
 @app.route('/top3', methods=['GET'])
 def get_top3_characters():
     """
     Get 3 characters with the highest sentiment score
     """
-    responses = session.query(Character).order_by(Character.sentiment_score.desc()).limit(3).all()
-    for response in responses:
-        print(response.id, response.full_name, response.sentiment_score)
-    print(f'---------\n{response}')
-    return jsonify({
-        'message': 'wow'
-        })
+    res = []
+    data = session.query(Character).order_by(Character.sentiment_score.desc()).limit(3).all()
+    character_list = [ {
+        "id": character.id,
+        "full_name": character.full_name,
+        "date_added": character.date_added,
+        "sentiment_score": character.sentiment_score,
+        "picture_link": character.picture_link } for character in data ]
+    return jsonify({ "characters": character_list })
 
+@app.route('/add_attribute', methods=['PUT'])
+def update_character():
+    data = request.json
+    # Define the new column
+    new_column = Column(data['attribute'], data['type'])
+    # Add the new column to the table
+    Character.create_column(new_column)
+    return jsonify({'message':'Attribute added successfully'})
+        
+        
+        
 if __name__ == '__main__':
     app.run(debug=True)
