@@ -6,13 +6,12 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 import configparser
+import datetime
 
 # Import config values
 config = configparser.ConfigParser()
-config.read("config.ini")
+config.read("../config.ini")
 db_url = config['Database']['url']
-print(f'---------- \n')
-print(f'---------- {db_url}')
 
 
 app = Flask(__name__)
@@ -30,7 +29,7 @@ class Character(Base):
     date_added = Column(Date)
     sentiment_score = Column(Float)
     picture_link = Column(String)
-    mentions = Column(Integer)
+    num_searches = Column(Integer)
 
 # Create the table in the database
 Base.metadata.create_all(engine)
@@ -45,7 +44,7 @@ def add_character():
     Add character to DB
     """
     data = request.json
-    new_character = Character(full_name=data['name'], date_added=datetime.now(), picture_link=data['picture_link'])
+    new_character = Character(full_name=data['name'], date_added=datetime.date.today(), picture_link=data['picture_link'])
     session.add(new_character)
     session.commit()
     return jsonify({'message':'User added successfully'})
@@ -110,8 +109,6 @@ def update_character():
     # Add the new column to the table
     Character.create_column(new_column)
     return jsonify({'message':'Attribute added successfully'})
-        
-        
-        
+
 if __name__ == '__main__':
     app.run(debug=True)

@@ -6,6 +6,9 @@
 front_end/.pnp
 front_end/.pnp.js
 
+# vscode configs
+.vscode/
+*/.ruff_cache
 
 
 # production
@@ -25,8 +28,8 @@ yarn-error.log*
 #config files
 *config.ini 
 
-#venv
-back_end/api
-back_end/back_end_venv
+#Ignore virtual env
+# venv
+*/back_end_venv
 
 
