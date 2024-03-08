@@ -32,7 +32,4 @@ yarn-error.log*
 *config.ini 
 
 #Ignore virtual env
-# venv
 */back_end_venv
-
-
