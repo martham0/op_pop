@@ -1,20 +1,21 @@
-from pytrends.request import TrendReq 
+from pytrends.request import TrendReq
+import pandas as pd
 
-GET_METHOD='get'
-# pytrend = TrendReq(retries=3)
+# stop empty values  from being changed to more specific dtype
+pd.set_option('future.no_silent_downcasting', True)
 
+# Interface to access Google Trends
+pytrends = TrendReq(hl='en-US')
 
+#  Search term list
+kw_list = ['Luffy']
 
+#  Query Google Trends
+pytrends.build_payload(kw_list, cat=0, timeframe='now 7-d', geo='', gprop='')
 
-# class TrendReq(UTrendReq):
-#     def _get_data(self, url, method=GET_METHOD, trim_chars=0, **kwargs):
-#         return super()._get_data(url, method=GET_METHOD, trim_chars=trim_chars, headers=headers, **kwargs)
+# Get related topics
+character_related_topics = pytrends.related_topics()
 
-# connect to google
-# pytrends = TrendReq(hl='en-US', tz=360, retries=3)
-pytrends = TrendReq(hl='en-US', tz=360, timeout=(10,25), proxies=['https://34.203.233.13:80',], retries=3, backoff_factor=0.1, requests_args={'verify':False})
+# Print only the topic titles in order of rising popularity
+print(character_related_topics["Luffy"]["rising"]["topic_title"])
 
-# build payload
-kw_list = ["Blockchain"]
-pytrends.build_payload(kw_list, cat=0, timeframe='today 5-y', geo='', gprop='')
-print(pytrends.related_topics())

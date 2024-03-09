@@ -13,5 +13,5 @@ zipp==3.17.0
 Flask-Cors==4.0.0
 psycopg2==2.9.9
 pytrends==4.9.2
-pyraw==7.7.1
+praw==7.7.1
 vaderSentiment==3.3.2
