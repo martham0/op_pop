@@ -6,13 +6,8 @@
 front_end/.pnp
 front_end/.pnp.js
 
-# vscode configs
-.vscode/
-*/.ruff_cache
-# vscode configs
-.vscode/
-*/.ruff_cache
-
+# pycharm configs
+*.idea/
 
 # production
 /build
