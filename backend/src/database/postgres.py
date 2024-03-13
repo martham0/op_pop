@@ -5,14 +5,18 @@ from sqlalchemy.orm import sessionmaker, query
 import datetime
 import configparser
 
-# # import configs
+# * Import configs
 config = configparser.ConfigParser()
 config.read("config.ini")
 db_url = config["Database"]["url"]
 
-# connect to DB
+# * Create the table in the database
 engine = create_engine(db_url)
 Base = declarative_base()
+
+# * Create a session to interact with the database
+Session = sessionmaker(bind=engine)
+session = Session()
 
 
 class Characters(Base):
@@ -33,15 +37,10 @@ class SentimentScores(Base):
     sentiment = Column(String)
     date_added = Column(Date)
     character_id = Column(Integer, ForeignKey("characters.id"))
-    # character = relationship("Characters", back_populates="sentiment_scores")
 
 
 # * Create the tables in the database
 Base.metadata.create_all(engine)
-
-# * Create a session to interact with the database
-Session = sessionmaker(bind=engine)
-session = Session()
 
 
 def add_character_to_db(character_name, picture_link=""):
@@ -54,13 +53,13 @@ def add_character_to_db(character_name, picture_link=""):
     session.commit()
 
 
-def add_sentiment_score_to_character(score):
+def add_sentiment_score_to_character(score, sentiment, character_id):
     """
     Add sentiment score to sentiment_scores table
 
     """
-    new_sentiment_score = SentimentScores(sentiment_score=score["average_score"], sentiment=score["sentiment"],
-                                          character_Id=score['character_id'], date_added=datetime.date.today())
+    new_sentiment_score = SentimentScores(sentiment_score=score, sentiment=sentiment,
+                                          character_id=character_id, date_added=datetime.date.today())
     session.add(new_sentiment_score)
     session.commit()
 
@@ -68,6 +67,12 @@ def add_sentiment_score_to_character(score):
 def get_character_by_id_from_db(character_id):
     character = session.get(Characters, character_id)
     return character
+
+
+def get_top_sentiment_score_today():
+    data = session.query(Characters).order_by(Characters.sentiment_score.desc()).limit(3).all()
+    data = session.query(SentimentScores).order_by(SentimentScores.sentiment_score.desc()).limit(3).all()
+    return data
 
 
 def get_all_characters_from_db():

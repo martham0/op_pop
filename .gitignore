@@ -8,6 +8,7 @@ front_end/.pnp.js
 
 # pycharm configs
 *.idea/
+__pycache__/
 
 # production
 /build

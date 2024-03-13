@@ -30,6 +30,7 @@ reddit = praw.Reddit(
 )
 
 
+# TODO use character ID to
 def get_yesterday_character_posts(character_name) -> list:
     """
     Queries OnePiece subreddit for all posts related to character_name in the last 24 hours using the reddit api
@@ -65,7 +66,7 @@ def calculate_sentiment_score(post_content) -> list:
 
 
 # get average character sentiment based on list of sentiment scores
-def character_sentiment(sentiment_scores) -> list:
+def character_sentiment(sentiment_scores) -> dict:
     """
     Averages out a list of sentiment scores and assigns it one of 3 sentiment negative[<0], neutral[0], or positive[>0]
     Args:
@@ -76,7 +77,7 @@ def character_sentiment(sentiment_scores) -> list:
     """
     average_score = statistics.mean(sentiment_scores)
     print(f"average score:{average_score}")
-    score = {"average_score": average_score, "sentiment": None, "character_id": None}
+    score = {"average_score": average_score, "sentiment": None}
     if average_score > 0:
         score["sentiment"] = "positive"
     elif average_score < 0:
@@ -84,7 +85,7 @@ def character_sentiment(sentiment_scores) -> list:
     else:
         score["sentiment"] = "neutral"
     return score
-#     ! Any benefit in changing this to an object
+
 
 
 # get character sentiment score of today
