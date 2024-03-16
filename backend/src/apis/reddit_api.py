@@ -10,18 +10,7 @@ from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 from pprint import pprint
 from dopplersdk import DopplerSDK
 
-doppler = DopplerSDK()
-doppler.set_access_token("dp.st.dev_personal.O8DeOQfg0bFmySZrUoXeqffuAojpxttW2jDgHzhQhuX")
 
-results = sdk.secrets.list(
-	project = 'dmp_prj',
-	config = 'CONFIG_NAME',
-	accepts = 'application/json',
-	include_dynamic_secrets = True,
-	dynamic_secrets_ttl_sec = 50843607,
-	secrets = 'AWS_RDS_DB_NAME',
-	include_managed_secrets = True
-)
 
 
 pprint(vars(results))
@@ -37,6 +26,20 @@ try:
     print(config["Reddit_creds"])
 except Exception as e:
     print("exception : ", e)
+
+doppler = DopplerSDK()
+doppler.set_access_token(["secrets"]["doppler"])
+
+results = sdk.secrets.list(
+    project='dmp_prj',
+    config='CONFIG_NAME',
+    accepts='application/json',
+    include_dynamic_secrets=True,
+    dynamic_secrets_ttl_sec=50843607,
+    secrets='AWS_RDS_DB_NAME',
+    include_managed_secrets=True
+
+)
 
 # Initialize sentiment analysis Instance 
 analyzer = SentimentIntensityAnalyzer()
