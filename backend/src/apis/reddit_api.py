@@ -6,6 +6,25 @@ import praw
 # NLP library 
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 
+# Secrets manager
+from pprint import pprint
+from dopplersdk import DopplerSDK
+
+doppler = DopplerSDK()
+doppler.set_access_token("dp.st.dev_personal.O8DeOQfg0bFmySZrUoXeqffuAojpxttW2jDgHzhQhuX")
+
+results = sdk.secrets.list(
+	project = 'dmp_prj',
+	config = 'CONFIG_NAME',
+	accepts = 'application/json',
+	include_dynamic_secrets = True,
+	dynamic_secrets_ttl_sec = 50843607,
+	secrets = 'AWS_RDS_DB_NAME',
+	include_managed_secrets = True
+)
+
+
+pprint(vars(results))
 # Import config values
 config = configparser.ConfigParser()
 db_url = os.environ.get("DB_URL_LOCAL")
@@ -106,13 +125,13 @@ def get_character_sentiment_score_today(character):
     return sentiment
 
 
-def main():
-    character = "luffy"
-    #  Search subreddit for a specific character submission on the current day
-    print(character)
-    sentiment = get_character_sentiment_score_today(character)
-    print(f"TADA: {sentiment}")
+# def main():
+#     character = "luffy"
+#     #  Search subreddit for a specific character submission on the current day
+#     print(character)
+#     sentiment = get_character_sentiment_score_today(character)
+#     print(f"TADA: {sentiment}")
 
-
-if __name__ == "__main__":
-    main()
+#
+# if __name__ == "__main__":
+#     main()
