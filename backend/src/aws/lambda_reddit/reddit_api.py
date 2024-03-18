@@ -1,5 +1,4 @@
 import os
-from dotenv import load_dotenv
 import statistics
 # wrapper for reddit API
 import praw
@@ -7,8 +6,6 @@ import praw
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 import json
 
-# Load environment variables from .env file
-load_dotenv("./config.env")
 
 # Access the environment variable
 REDDIT_CLIENT_ID = os.getenv('REDDIT_CLIENT_ID')
@@ -27,8 +24,6 @@ reddit = praw.Reddit(
     user_agent=REDDIT_USER_AGENT
 )
 
-
-# # TODO use character ID to
 def get_yesterday_character_posts(character_name) -> list:
     """
     Queries OnePiece subreddit for all posts related to character_name in the last 24 hours using the reddit api
@@ -42,7 +37,6 @@ def get_yesterday_character_posts(character_name) -> list:
     # search all posts related to the specified character and append them to post_list
     for submission in reddit.subreddit(subreddit).search(query=character_name, sort="hot", time_filter="day",
                                                          syntax="plain"):
-        print(f"**{submission.title}**\n")
         post_list.append(submission.selftext)
     return post_list
 
@@ -59,6 +53,7 @@ def calculate_sentiment_score(post_content) -> list:
     # Calculate sentiment score for every post
     for post in post_content:
         vs = analyzer.polarity_scores(post)
+        # grab compound score
         scores.append(vs["compound"])
     return scores
 
@@ -74,7 +69,6 @@ def character_sentiment(sentiment_scores) -> dict:
             negative[<0], neutral[0], or positive[>0] based on average score
     """
     average_score = statistics.mean(sentiment_scores)
-    print(f"average score:{average_score}")
     score = {"average_score": average_score, "sentiment": None}
     if average_score > 0:
         score["sentiment"] = "positive"
@@ -96,24 +90,23 @@ def get_character_sentiment_score_today(character) -> dict:
             negative[<0], neutral[0], or positive[>0] based on average score
     """
     reddit_posts = get_yesterday_character_posts(character)
-    print(f"-------\nTHESE ARE ALL THE REDDIT POSTS\n{reddit_posts}")
     sentiment_scores = calculate_sentiment_score(reddit_posts)
-    print(f"-------\nTHESE ARE ALL THE POST SCORES\n{sentiment_scores}")
     sentiment = character_sentiment(sentiment_scores)
     return sentiment
 
 
 def handler(event, context):
-    body_str = event['body']
+    body_str = event["body"]
 
     # Parse the JSON body
     body = json.loads(body_str)
 
     # Access specific fields from the body
-    character = body.get('character')
+    character = body.get("character")
     #  Search subreddit for a specific character submission on the current day
     sentiment = get_character_sentiment_score_today(character)
     response = {
         "statusCode": 200,
-        "body": f"{character}"
+        "body": f"{sentiment}"
     }
+    return response

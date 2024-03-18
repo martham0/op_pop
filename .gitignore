@@ -25,8 +25,13 @@ yarn-debug.log*
 yarn-error.log*
 
 #config files
-*config.ini
 *.env
 *.ini
 #Ignore virtual env
 */back_end_venv
+
+#compressed lambda source code
+*.zip
+
+#Ignore lambda layer
+*/lambda_layer
