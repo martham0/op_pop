@@ -15,7 +15,7 @@ def add_character():
     data = request.json
     # TODO check if character exists
     try:
-        add_character_to_db(data["name"], data["picture_link"])
+        # add_character_to_db(data["name"], data["picture_link"])
         return jsonify({"message": "User added successfully"}), 200
     except Exception as e:
         # Handle any error
@@ -69,18 +69,18 @@ def get_all_characters():
 
 #
 #
-@app.route("/top_three", methods=["GET"])
-def get_top_three_characters():
-    """
-    Get top 3 characters with the highest sentiment score
-    """
-    data = get_top_three_characters_from_db()
-    character_list = [{
-        "id": character.id,
-        "full_name": character.full_name,
-        "date_added": character.date_added,
-        "picture_link": character.picture_link} for character in data]
-    return jsonify({"characters": character_list})
+# @app.route("/top_three", methods=["GET"])
+# def get_top_three_characters():
+#     """
+#     Get top 3 characters with the highest sentiment score
+#     """
+#     data = get_top_three_characters_from_db()
+#     character_list = [{
+#         "id": character.id,
+#         "full_name": character.full_name,
+#         "date_added": character.date_added,
+#         "picture_link": character.picture_link} for character in data]
+#     return jsonify({"characters": character_list})
 
 
 # @app.route("/add_attribute", methods=["PUT"])
