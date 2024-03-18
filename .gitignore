@@ -27,6 +27,6 @@ yarn-error.log*
 #config files
 *config.ini
 *.env
-
+*.ini
 #Ignore virtual env
 */back_end_venv
