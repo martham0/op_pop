@@ -34,4 +34,4 @@ yarn-error.log*
 *.zip
 
 #Ignore lambda layer
-*/lambda_layer
+/backend/src/aws/lambda_layer
