@@ -22,12 +22,14 @@ This app analyzes character popularity from One Piece. In the One Piece world, w
 - [x] Set up APIs using Flask
 - [x] Connect a Postgress local instance to the API
 - [ ] Gather trend data 
-- [ ] Gather reddit data using API
-    - [ ] Analyse API data using Vader sentiment analysis
+- [x] Gather reddit data using API
+    - [x] Analyse API data using Vader sentiment analysis
       
 - [ ] Implement AWS SDK
-    - [ ] Move function into Lambda
-    - [ ] Set up Event Bridge 
+    - [ ] Set up RDS
+    - [x] Set up API Gateway
+    - [ ] Set up Event Bridge
+    - [x] Move function into Lambda
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
