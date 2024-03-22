@@ -28,7 +28,7 @@ yarn-error.log*
 *.env
 *.ini
 #Ignore virtual env
-*/back_end_venv
+*/*venv
 
 #compressed lambda source code
 *.zip
