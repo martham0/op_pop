@@ -11,7 +11,7 @@ AWS_DB_PASSWORD = os.getenv("AWS_DB_PASSWORD")
 AWS_DB_NAME = os.getenv("AWS_DB_NAME")
 AWS_DB_PORT = os.getenv("AWS_DB_PORT")
 
-# * Create the table in the database
+# * Connect to database
 engine = create_engine(f"postgresql://{AWS_DB_USERNAME}:{AWS_DB_PASSWORD}@{AWS_DB_ENDPOINT}/{AWS_DB_NAME}")
 Base = declarative_base()
 
