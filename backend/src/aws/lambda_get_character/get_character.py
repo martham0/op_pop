@@ -1,17 +1,18 @@
 from sqlalchemy import create_engine, Column, Integer, String, Date, Float, ForeignKey, desc
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, query
 import datetime
 import os
 import json
 
+# * Import env variables
 AWS_DB_ENDPOINT = os.getenv("AWS_DB_ENDPOINT")
 AWS_DB_USERNAME = os.getenv("AWS_DB_USERNAME")
 AWS_DB_PASSWORD = os.getenv("AWS_DB_PASSWORD")
 AWS_DB_NAME = os.getenv("AWS_DB_NAME")
 AWS_DB_PORT = os.getenv("AWS_DB_PORT")
 
-# * Create the table in the database
+# * Connect to database
 engine = create_engine(f"postgresql://{AWS_DB_USERNAME}:{AWS_DB_PASSWORD}@{AWS_DB_ENDPOINT}/{AWS_DB_NAME}")
 Base = declarative_base()
 
@@ -40,43 +41,33 @@ class SentimentScores(Base):
     character_id = Column(Integer, ForeignKey("characters.id"))
 
 
-# * Create the tables in the database
-Base.metadata.create_all(engine)
-
-
-def add_character_to_db(character_name, picture_link=""):
+def get_character_by_id_from_db(character_id):
     """
-    Add character to postgres characters table and return dict of character added
+    Get character name from RDS using ID
     """
-    new_character = Characters(full_name=character_name, date_added=datetime.date.today(),
-                               picture_link=picture_link)
-    session.add(new_character)
-    session.commit()
-    return session.query(Characters).order_by(desc(Characters.id)).first()
+    character = session.get(Characters, character_id)
+    return character
 
 
 def handler(event, context):
     """
-    Grab character name from json body and invoke add_character_to_db
+    Grab character id from path parameter and invoke get_character_by_id_from_db
     """
-    body_str = event["body"]
+    # * Access character_id from the path parameter
+    path_parameter = event["pathParameters"]
+    character_id = int(path_parameter.get("character_id"))
 
-    # Parse the JSON body
-    body = json.loads(body_str)
+    # * Get character info
+    character = get_character_by_id_from_db(character_id)
 
-    # Access specific fields from the body
-    character = body.get("character")
-    new_character = add_character_to_db(character)
-
+    # * Convert character info into json
     character_data = {
-        "id": new_character.id,
-        "name": new_character.full_name,
+        "id": character.id,
+        "name": character.full_name,
     }
-
     json_character_data = json.dumps(character_data)
     response = {
         "statusCode": 200,
-        "body": f"Character has been added:\n{character_data}"
+        "body": f"Character info:\n{json_character_data}"
     }
     return response
-
