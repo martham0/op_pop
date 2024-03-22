@@ -46,7 +46,7 @@ Base.metadata.create_all(engine)
 
 def add_character_to_db(character_name, picture_link=""):
     """
-    Add character to postgres characters table and return dict of character added
+    Add character to postgres characters table and return character added
     """
     new_character = Characters(full_name=character_name, date_added=datetime.date.today(),
                                picture_link=picture_link)

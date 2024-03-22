@@ -96,6 +96,9 @@ def get_character_sentiment_score_today(character) -> dict:
 
 
 def handler(event, context):
+    """
+        Grab character name from json body and invoke get_character_sentiment_score_today
+    """
     body_str = event["body"]
 
     # Parse the JSON body
