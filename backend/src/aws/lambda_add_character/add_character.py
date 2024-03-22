@@ -19,7 +19,8 @@ Base = declarative_base()
 Session = sessionmaker(bind=engine)
 session = Session()
 
-# * Table schema
+
+# * Character table schema
 class Characters(Base):
     __tablename__ = "characters"
 
@@ -28,16 +29,6 @@ class Characters(Base):
     date_added = Column(Date)
     picture_link = Column(String)
     # num_searches = Column(Integer)
-
-
-class SentimentScores(Base):
-    __tablename__ = "sentiment_scores"
-
-    id = Column(Integer, primary_key=True)
-    sentiment_score = Column(Float)
-    sentiment = Column(String)
-    date_added = Column(Date)
-    character_id = Column(Integer, ForeignKey("characters.id"))
 
 
 # * Create the tables in the database
@@ -79,4 +70,3 @@ def handler(event, context):
         "body": f"Character has been added:\n{character_data}"
     }
     return response
-

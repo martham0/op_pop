@@ -20,7 +20,8 @@ Base = declarative_base()
 Session = sessionmaker(bind=engine)
 session = Session()
 
-# * Table schema
+
+# * Character table schema
 class Characters(Base):
     __tablename__ = "characters"
 
@@ -29,16 +30,6 @@ class Characters(Base):
     date_added = Column(Date)
     picture_link = Column(String)
     # num_searches = Column(Integer)
-
-
-class SentimentScores(Base):
-    __tablename__ = "sentiment_scores"
-
-    id = Column(Integer, primary_key=True)
-    sentiment_score = Column(Float)
-    sentiment = Column(String)
-    date_added = Column(Date)
-    character_id = Column(Integer, ForeignKey("characters.id"))
 
 
 def get_character_by_id_from_db(character_id):
