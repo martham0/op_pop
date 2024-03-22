@@ -7,15 +7,6 @@
 This app analyzes character popularity from One Piece. In the One Piece world, we have many characters who have varying popularity at a given time. I wanted to capture that relationship, where we can see how the public is feeling about a certain character at a certain time. 
 
 
-<!-- GETTING STARTED -->
-## Getting Started
-### Prerequisites
-### Installation
-
-<!-- USAGE EXAMPLES -->
-## Usage
-
-
 <!-- ROADMAP -->
 ## Roadmap
 
