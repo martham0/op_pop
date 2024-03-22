@@ -26,7 +26,7 @@ This app analyzes character popularity from One Piece. In the One Piece world, w
     - [x] Analyse API data using Vader sentiment analysis
       
 - [ ] Implement AWS SDK
-    - [ ] Set up RDS
+    - [x] Set up RDS
     - [x] Set up API Gateway
     - [ ] Set up Event Bridge
     - [x] Move function into Lambda
