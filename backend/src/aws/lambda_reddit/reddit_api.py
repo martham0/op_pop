@@ -4,7 +4,7 @@ import statistics
 import praw
 # NLP library
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
-import json
+
 
 
 # Access the environment variable
@@ -99,13 +99,10 @@ def handler(event, context):
     """
         Grab character name from json body and invoke get_character_sentiment_score_today
     """
-    body_str = event["body"]
+    path_parameter = event["pathParameters"]
 
-    # Parse the JSON body
-    body = json.loads(body_str)
+    character = path_parameter.get("character")
 
-    # Access specific fields from the body
-    character = body.get("character")
     #  Search subreddit for a specific character submission on the current day
     sentiment = get_character_sentiment_score_today(character)
     response = {
