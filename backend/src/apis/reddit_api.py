@@ -8,8 +8,7 @@ from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 
 # Import config values
 config = configparser.ConfigParser()
-db_url = os.environ.get("DB_URL_LOCAL")
-print(f"____{db_url}_______")
+
 
 # getting path to config
 try:
@@ -44,10 +43,10 @@ def get_yesterday_character_posts(character_name) -> list:
     # search all posts related to the specified character and append them to post_list
     for submission in reddit.subreddit(subreddit).search(query=character_name, sort="hot", time_filter="day",
                                                          syntax="plain"):
-        print(f"**{submission.title}**\n")
-        post_list.append(submission.selftext)
+        content = submission.selftext
+        if content != '':
+            post_list.append(content)
     return post_list
-
 
 def calculate_sentiment_score(post_content) -> list:
     """
@@ -99,7 +98,7 @@ def get_character_sentiment_score_today(character):
             negative[<0], neutral[0], or positive[>0] based on average score
     """
     reddit_posts = get_yesterday_character_posts(character)
-    print(f"-------\nTHESE ARE ALL THE REDDIT POSTS\n{reddit_posts}")
+    print(f"-------\nTHESE ARE ALL ({len(reddit_posts)}) THE REDDIT POSTS\n{reddit_posts}")
     sentiment_scores = calculate_sentiment_score(reddit_posts)
     print(f"-------\nTHESE ARE ALL THE POST SCORES\n{sentiment_scores}")
     sentiment = character_sentiment(sentiment_scores)
@@ -107,7 +106,7 @@ def get_character_sentiment_score_today(character):
 
 
 def main():
-    character = "luffy"
+    character = "vivi"
     #  Search subreddit for a specific character submission on the current day
     print(character)
     sentiment = get_character_sentiment_score_today(character)

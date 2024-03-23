@@ -49,8 +49,9 @@ def add_sentiment_score_to_character(score, sentiment, id):
     Add sentiment score to sentiment_scores table
 
     """
+    date_today = datetime.date.today()
     new_sentiment_score = SentimentScores(sentiment_score=score, sentiment=sentiment,
-                                          character_id=id, date_added=datetime.date.today())
+                                          character_id=id, date_added=date_today)
     session.add(new_sentiment_score)
     session.commit()
     return session.query(SentimentScores).order_by(desc(SentimentScores.id)).first()

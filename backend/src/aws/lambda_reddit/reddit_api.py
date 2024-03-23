@@ -11,8 +11,6 @@ from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 REDDIT_CLIENT_ID = os.getenv('REDDIT_CLIENT_ID')
 REDDIT_CLIENT_SECRET = os.getenv('REDDIT_CLIENT_SECRET')
 REDDIT_USER_AGENT = os.getenv('REDDIT_USER_AGENT')
-REDDIT_USERNAME = os.getenv('REDDIT_USERNAME')
-REDDIT_PASSWORD = os.getenv('REDDIT_PASSWORD')
 
 # Initialize sentiment analysis Instance
 analyzer = SentimentIntensityAnalyzer()
@@ -37,7 +35,10 @@ def get_yesterday_character_posts(character_name) -> list:
     # search all posts related to the specified character and append them to post_list
     for submission in reddit.subreddit(subreddit).search(query=character_name, sort="hot", time_filter="day",
                                                          syntax="plain"):
-        post_list.append(submission.selftext)
+        content = submission.selftext
+        # if post has no characters to analyze ignore
+        if content != '':
+            post_list.append(content)
     return post_list
 
 
