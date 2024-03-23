@@ -20,7 +20,7 @@ Session = sessionmaker(bind=engine)
 session = Session()
 
 
-# * Character table schema
+# * SentimentScores table schema
 class Characters(Base):
     __tablename__ = "characters"
 
@@ -30,20 +30,30 @@ class Characters(Base):
     picture_link = Column(String)
 
 
+class SentimentScores(Base):
+    __tablename__ = "sentiment_scores"
+
+    id = Column(Integer, primary_key=True)
+    sentiment_score = Column(Float)
+    sentiment = Column(String)
+    date_added = Column(Date)
+    character_id = Column(Integer, ForeignKey("characters.id"))
+
 
 # * Create the tables in the database
 Base.metadata.create_all(engine)
 
 
-def add_character_to_db(character_name, picture_link=""):
+def add_sentiment_score_to_character(score, sentiment, id):
     """
-    Add character to postgres characters table and return character added
+    Add sentiment score to sentiment_scores table
+
     """
-    new_character = Characters(full_name=character_name, date_added=datetime.date.today(),
-                               picture_link=picture_link)
-    session.add(new_character)
+    new_sentiment_score = SentimentScores(sentiment_score=score, sentiment=sentiment,
+                                          character_id=id, date_added=datetime.date.today())
+    session.add(new_sentiment_score)
     session.commit()
-    return session.query(Characters).order_by(desc(Characters.id)).first()
+    return session.query(SentimentScores).order_by(desc(SentimentScores.id)).first()
 
 
 def handler(event, context):
@@ -52,21 +62,26 @@ def handler(event, context):
     """
     body_str = event["body"]
 
-    # Parse the JSON body
+    # Parse the JSON string into a dictionary
     body = json.loads(body_str)
 
     # Access specific fields from the body
-    character = body.get("character")
-    new_character = add_character_to_db(character)
+    score = body.get("score")
+    sentiment = body.get("sentiment")
+    character_id = body.get("character_id")
+    new_score = add_sentiment_score_to_character(score, sentiment, character_id)
 
-    character_data = {
-        "id": new_character.id,
-        "name": new_character.full_name,
+    score_data = {
+        "id": new_score.id,
+        "sentiment_score": new_score.sentiment_score,
+        "sentiment": new_score.sentiment,
+        "date_added": new_score.date_added,
+        "character_id": new_score.character_id
     }
 
-    json_character_data = json.dumps(character_data)
+    # json_character_data = json.dumps(character_data)
     response = {
         "statusCode": 200,
-        "body": f"Character has been added:\n{character_data}"
+        "body": f"score input:{score_data}\n"
     }
     return response

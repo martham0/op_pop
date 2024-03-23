@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, Column, Integer, String, Date, Float, ForeignKey
+from sqlalchemy import create_engine, Column, Integer, String, Date, Float, ForeignKey, desc
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
@@ -26,7 +26,6 @@ class Characters(Base):
     full_name = Column(String)
     date_added = Column(Date)
     picture_link = Column(String)
-    # num_searches = Column(Integer)
 
 
 class SentimentScores(Base):
@@ -62,6 +61,7 @@ def add_sentiment_score_to_character(score, sentiment, character_id):
                                           character_id=character_id, date_added=datetime.date.today())
     session.add(new_sentiment_score)
     session.commit()
+    return session.query(SentimentScores).order_by(desc(SentimentScores.id)).first()
 
 
 def get_character_by_id_from_db(character_id):
