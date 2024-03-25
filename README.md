@@ -23,9 +23,10 @@ This app analyzes character popularity from One Piece. In the One Piece world, w
     - [x] Move function into Lambda
 
 
-## Demo
-# AWS API Gateway
-[![Endpoints](https://youtu.be/IWb_oIAs5N8)
+# Demo
+### AWS API Gateway
+[![Endpoints](https://i9.ytimg.com/vi_webp/IWb_oIAs5N8/mqdefault.webp?v=6601d212&sqp=CJCmh7AG&rs=AOn4CLAdscqW-g1YXMQ7tgJjnqwIvmvMCw)](https://youtu.be/IWb_oIAs5N8)
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
