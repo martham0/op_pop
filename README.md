@@ -27,6 +27,8 @@ This app analyzes character popularity from One Piece. In the One Piece world, w
 ### AWS API Gateway
 
 https://github.com/martham0/op_pop/assets/69860036/3cc8fded-188a-4296-b8ac-647eea6cc04b
+
+
 [![Endpoints](https://i9.ytimg.com/vi_webp/IWb_oIAs5N8/mqdefault.webp?v=6601d212&sqp=CJCmh7AG&rs=AOn4CLAdscqW-g1YXMQ7tgJjnqwIvmvMCw)](https://youtu.be/IWb_oIAs5N8)
 
 
